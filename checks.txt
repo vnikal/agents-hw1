@@ -1,0 +1,45 @@
+v1
+T1 {"rows":3,"total":"8","done":null,"progress":"33%"}
+T2 {"rows":3,"total":"8","done":null,"progress":"67%"}
+T3 {"rows":2,"total":"8","done":null,"progress":"33%","names":["Практика","Повторение"]}
+T4 {"title":"","hours":"2","accepted":false,"native":true,"custom":null,"errors":[],"retained":true}
+T4 {"title":"  ","hours":"2","accepted":false,"native":false,"custom":"Введите название задачи.","errors":[],"retained":true}
+T4 {"title":"Тест","hours":"","accepted":false,"native":true,"custom":null,"errors":[],"retained":true}
+T4 {"title":"Тест","hours":"-1","accepted":false,"native":true,"custom":null,"errors":[],"retained":true}
+T4 {"title":"Тест","hours":"0.49","accepted":true,"native":false,"custom":null,"errors":[],"retained":false}
+T4 {"title":"Тест","hours":"0.5","accepted":true,"native":false,"custom":null,"errors":[],"retained":false}
+T4 {"title":"Тест","hours":"1.25","accepted":true,"native":false,"custom":null,"errors":[],"retained":false}
+T4 {"title":"Тест","hours":"24","accepted":true,"native":false,"custom":null,"errors":[],"retained":false}
+T4 {"title":"Тест","hours":"24.5","accepted":true,"native":false,"custom":null,"errors":[],"retained":false}
+T5 {"rows":0,"total":"0","done":null,"progress":"0%"}
+
+v2
+T1 {"rows":3,"total":null,"done":null,"progress":"2 из 8 ч · 25%"}
+T2 {"rows":3,"total":null,"done":null,"progress":"6 из 8 ч · 75%"}
+T3 {"rows":2,"total":null,"done":null,"progress":"2 из 8 ч · 25%","names":["Практика","Повторение"]}
+T4 {"title":"","hours":"2","accepted":false,"native":false,"custom":null,"errors":["Введите название задачи."],"retained":true}
+T4 {"title":"  ","hours":"2","accepted":false,"native":false,"custom":null,"errors":["Введите название задачи."],"retained":true}
+T4 {"title":"Тест","hours":"","accepted":false,"native":false,"custom":null,"errors":["Введите количество часов."],"retained":true}
+T4 {"title":"Тест","hours":"-1","accepted":false,"native":false,"custom":null,"errors":["Введите число от 0,5 до 24 с шагом 0,5."],"retained":true}
+T4 {"title":"Тест","hours":"0.49","accepted":false,"native":false,"custom":null,"errors":["Введите число от 0,5 до 24 с шагом 0,5."],"retained":true}
+T4 {"title":"Тест","hours":"0.5","accepted":true,"native":false,"custom":null,"errors":[],"retained":false}
+T4 {"title":"Тест","hours":"1.25","accepted":false,"native":false,"custom":null,"errors":["Введите число от 0,5 до 24 с шагом 0,5."],"retained":true}
+T4 {"title":"Тест","hours":"24","accepted":true,"native":false,"custom":null,"errors":[],"retained":false}
+T4 {"title":"Тест","hours":"24.5","accepted":false,"native":false,"custom":null,"errors":["Введите число от 0,5 до 24 с шагом 0,5."],"retained":true}
+T5 {"rows":0,"total":null,"done":null,"progress":"0 из 0 ч · 0%"}
+
+v1-fixed
+T1 {"rows":3,"total":"2 / 8 ч","done":null,"progress":"25%"}
+T2 {"rows":3,"total":"6 / 8 ч","done":null,"progress":"75%"}
+T3 {"rows":2,"total":"2 / 8 ч","done":null,"progress":"25%","names":["Практика","Повторение"]}
+T4 {"title":"","hours":"2","accepted":false,"native":false,"custom":null,"errors":["Введите название задачи."],"retained":true}
+T4 {"title":"  ","hours":"2","accepted":false,"native":false,"custom":null,"errors":["Введите название задачи."],"retained":true}
+T4 {"title":"Тест","hours":"","accepted":false,"native":false,"custom":null,"errors":["Введите оценку."],"retained":true}
+T4 {"title":"Тест","hours":"-1","accepted":false,"native":false,"custom":null,"errors":["От 0,5 до 24 ч."],"retained":true}
+T4 {"title":"Тест","hours":"0.49","accepted":false,"native":false,"custom":null,"errors":["От 0,5 до 24 ч."],"retained":true}
+T4 {"title":"Тест","hours":"0.5","accepted":true,"native":false,"custom":null,"errors":[],"retained":false}
+T4 {"title":"Тест","hours":"1.25","accepted":true,"native":false,"custom":null,"errors":[],"retained":false}
+T4 {"title":"Тест","hours":"24","accepted":true,"native":false,"custom":null,"errors":[],"retained":false}
+T4 {"title":"Тест","hours":"24.5","accepted":false,"native":false,"custom":null,"errors":["От 0,5 до 24 ч."],"retained":true}
+T5 {"rows":0,"total":"0 ч","done":null,"progress":"0%"}
+

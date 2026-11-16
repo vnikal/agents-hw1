@@ -1,0 +1,140 @@
+<!doctype html>
+<html lang="ru">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Учебные задачи</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#f5f6fa;color:#1e2534;font:16px system-ui,sans-serif}main{max-width:760px;margin:6vh auto;padding:20px}h1{margin:0 0 20px;font-size:clamp(2rem,7vw,3rem);letter-spacing:-.04em}.summary,form,.task{background:white;border:1px solid #e1e4ef;border-radius:14px;padding:16px}.summary{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}.summary strong{display:block;font-size:1.5rem}.summary span{color:#4b556a}progress{grid-column:1/-1;width:100%;accent-color:#4b41bc}form{display:flex;flex-wrap:wrap;align-items:end;gap:12px}label{display:grid;gap:6px}.title{flex:1;min-width:150px}input,button{font:inherit}input:not([type=checkbox]){width:100%;padding:9px;border:1px solid #a2aac0;border-radius:7px}.hours{width:105px}button{cursor:pointer;padding:9px 12px;border-radius:8px;background:white;border:1px solid #a2aac0;color:inherit}.primary,button[aria-pressed=true]{background:#4b41bc;color:white;border-color:#4b41bc}.filters{display:flex;flex-wrap:wrap;gap:8px;margin:18px 0 12px}ul{list-style:none;padding:0;margin:0;display:grid;gap:8px}.task{display:flex;align-items:center;gap:10px}.task label{display:flex;align-items:center;flex:1;min-width:0}.task label span{overflow-wrap:anywhere}.task input:checked+span{text-decoration:line-through;color:#626b7f}.estimate{white-space:nowrap}.empty{margin:16px 0;color:#4b556a}[hidden]{display:none}
+</style>
+<main>
+<h1>Учебные задачи</h1>
+<section class="summary" aria-label="Сводка">
+<div><span>Всего часов</span><strong id="total"></strong></div>
+<div><span>Задач выполнено</span><strong id="percent"></strong></div>
+<progress id="progress" max="100" aria-label="Процент выполнения"></progress>
+</section>
+<form id="form">
+<label class="title">Название задачи<input id="name" maxlength="120" required placeholder="Например, решить задачи"></label>
+<label class="hours">Оценка, ч<input id="hours" type="number" min="0.01" step="any" required placeholder="2"></label>
+<button class="primary" type="submit">Добавить</button>
+</form>
+<div class="filters" role="group" aria-label="Фильтр задач">
+<button type="button" data-filter="all" aria-pressed="true">Все</button>
+<button type="button" data-filter="active" aria-pressed="false">Активные</button>
+<button type="button" data-filter="done" aria-pressed="false">Готовые</button>
+</div>
+<ul id="tasks"></ul>
+<p id="empty" class="empty" hidden>Здесь пока нет задач.</p>
+</main>
+<script>
+const examples = [
+  { name: 'Чтение', hours: 2, done: true },
+  { name: 'Практика', hours: 4, done: false },
+  { name: 'Повторение', hours: 2, done: false }
+];
+const key = 'study-task-tracker-v1';
+let tasks = examples;
+try {
+  const saved = JSON.parse(localStorage.getItem(key));
+  if (Array.isArray(saved) && saved.every(task => task && typeof task.name === 'string' && Number.isFinite(task.hours) && typeof task.done === 'boolean')) tasks = saved;
+} catch {}
+let filter = 'all';
+const form = document.querySelector('#form');
+const nameInput = document.querySelector('#name');
+const hoursInput = document.querySelector('#hours');
+const list = document.querySelector('#tasks');
+const empty = document.querySelector('#empty');
+const buttons = [...document.querySelectorAll('[data-filter]')];
+const numberFormat = new Intl.NumberFormat('ru-RU', { maximumFractionDigits: 6 });
+
+function updateSummary() {
+  const total = tasks.reduce((sum, task) => sum + task.hours, 0);
+  const done = tasks.filter(task => task.done).length;
+  const percent = tasks.length ? Math.round(done / tasks.length * 100) : 0;
+  document.querySelector('#total').textContent = numberFormat.format(total);
+  document.querySelector('#percent').textContent = percent + '%';
+  document.querySelector('#progress').value = percent;
+}
+
+function save() {
+  try { localStorage.setItem(key, JSON.stringify(tasks)); } catch {}
+}
+
+function render() {
+  updateSummary();
+  list.replaceChildren();
+  for (const task of tasks) {
+    if (filter !== 'all' && task.done !== (filter === 'done')) continue;
+    const row = document.createElement('li');
+    row.className = 'task';
+    const label = document.createElement('label');
+    const checkbox = document.createElement('input');
+    checkbox.type = 'checkbox';
+    checkbox.checked = task.done;
+    checkbox.setAttribute('aria-label', 'Готово: ' + task.name);
+    checkbox.addEventListener('change', () => {
+      task.done = checkbox.checked;
+      save();
+      if (filter === 'all') updateSummary();
+      else {
+        const next = row.nextElementSibling || row.previousElementSibling;
+        row.remove();
+        empty.hidden = list.children.length > 0;
+        updateSummary();
+        (next?.querySelector('input') || buttons.find(button => button.dataset.filter === filter)).focus();
+      }
+    });
+    const title = document.createElement('span');
+    title.textContent = task.name;
+    label.append(checkbox, title);
+    const estimate = document.createElement('span');
+    estimate.className = 'estimate';
+    estimate.textContent = numberFormat.format(task.hours) + ' ч';
+    const remove = document.createElement('button');
+    remove.type = 'button';
+    remove.textContent = 'Удалить';
+    remove.setAttribute('aria-label', 'Удалить: ' + task.name);
+    remove.addEventListener('click', () => {
+      tasks.splice(tasks.indexOf(task), 1);
+      save();
+      const next = row.nextElementSibling || row.previousElementSibling;
+      row.remove();
+      empty.hidden = list.children.length > 0;
+      updateSummary();
+      (next?.querySelector('button') || nameInput).focus();
+    });
+    row.append(label, estimate, remove);
+    list.append(row);
+  }
+  empty.hidden = list.children.length > 0;
+}
+
+for (const button of buttons) {
+  button.addEventListener('click', () => {
+    filter = button.dataset.filter;
+    for (const option of buttons) option.setAttribute('aria-pressed', String(option === button));
+    render();
+  });
+}
+
+nameInput.addEventListener('input', () => nameInput.setCustomValidity(''));
+form.addEventListener('submit', event => {
+  event.preventDefault();
+  const name = nameInput.value.trim();
+  const hours = hoursInput.valueAsNumber;
+  if (!name) {
+    nameInput.setCustomValidity('Введите название задачи.');
+    nameInput.reportValidity();
+    return;
+  }
+  if (!Number.isFinite(hours) || hours < 0.01) return;
+  tasks.push({ name, hours, done: false });
+  save();
+  if (filter === 'done') buttons[1].click();
+  else render();
+  form.reset();
+  nameInput.focus();
+});
+render();
+</script>
+</html>
